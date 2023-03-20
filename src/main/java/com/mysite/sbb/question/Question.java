@@ -1,19 +1,24 @@
-package com.mysite.sbb;
+package com.mysite.sbb.question;
 
+import com.mysite.sbb.answer.Answer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter @Setter
 @Entity
-public class Answer {
+public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
+
+    @Column(length = 200)
+    private String subject;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -21,6 +26,6 @@ public class Answer {
     @CreatedDate
     private LocalDateTime createDate;
 
-    @ManyToOne
-    private Question question;
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE) // 질문 삭제되면 답변도 같이삭제
+    private List<Answer> answerList;
 }
