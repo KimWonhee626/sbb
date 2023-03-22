@@ -2,9 +2,14 @@ package com.mysite.sbb.question;
 
 import com.mysite.sbb.DataNotFoundException.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +38,13 @@ public class QuestionService {
         q.setContent(content);
         q.setCreateDate(LocalDateTime.now());
         this.questionRepository.save(q);
+    }
+
+    public Page<Question> getList(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate")); // 작성일시 역순으로 조회(최근 게시물 먼저 보임)
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 게시물 10개씩 페이징
+        return this.questionRepository.findAll(pageable);
     }
 
 }
