@@ -23,7 +23,7 @@ public class QuestionService {
         return this.questionRepository.findAll();
     }
 
-    public Question getQuestion(Integer id){
+public Question getQuestion(Integer id){
         Optional<Question> question  =  this.questionRepository.findById(id);
 
         if (question.isPresent()) {
@@ -34,12 +34,12 @@ public class QuestionService {
     }
 
     public void create(String subject, String content, SiteUser author){
-        Question q = new Question();
-        q.setSubject(subject);
-        q.setContent(content);
-        q.setCreateDate(LocalDateTime.now());
-        q.setAuthor(author);
-        this.questionRepository.save(q);
+        Question question = new Question();
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setCreateDate(LocalDateTime.now());
+        question.setAuthor(author);
+        this.questionRepository.save(question);
     }
 
     public Page<Question> getList(int page) {
@@ -47,6 +47,17 @@ public class QuestionService {
         sorts.add(Sort.Order.desc("createDate")); // 작성일시 역순으로 조회(최근 게시물 먼저 보임)
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 게시물 10개씩 페이징
         return this.questionRepository.findAll(pageable);
+    }
+
+    public void modify(Question question, String subject, String content){
+        question.setSubject(subject);
+        question.setContent(content);
+        question.setModifyDate(LocalDateTime.now());
+        this.questionRepository.save(question);
+    }
+
+    public void delete(Question question){
+        this.questionRepository.delete(question);
     }
 
 }
