@@ -55,7 +55,7 @@ public Question getQuestion(Integer id){
         sorts.add(Sort.Order.desc("createDate")); // 작성일시 역순으로 조회(최근 게시물 먼저 보임)
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 게시물 10개씩 페이징
         Specification<Question> spec = search(kw);
-        return this.questionRepository.findAll(spec, pageable);
+        return this.questionRepository.findAllByKeyword(kw, pageable);
     }
 
     public void modify(Question question, String subject, String content){
